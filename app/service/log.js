@@ -2,18 +2,20 @@
 
 const assert = require('assert');
 const Service = require('egg').Service;
+const moment = require('moment');
 class LogService extends Service {
   constructor(ctx) {
     super(ctx);
     this.model = this.ctx.model.Log;
   }
-  async create({ service, module, method, result, userInfo, resData, reqData, createAt }) {
+  async create({ service, module, method, result, userInfo, resData, reqData, ip }) {
     assert(service, '服务不存在');
     assert(module, '模块不存在');
     assert(method, '方法不存在');
     assert(result, '结果不存在');
+    const createAt = moment().format('x');
     try {
-      const res = await this.model.create({ service, module, method, result, ...userInfo, resData, reqData, createAt });
+      const res = await this.model.create({ service, module, method, result, ...userInfo, resData, reqData, ip, createAt });
       return { errcode: 0, errmsg: 'ok', data: res };
     } catch (error) {
       throw error;
@@ -38,7 +40,7 @@ class LogService extends Service {
     if (userName) filter.$or.push({ userName: { $regex: userName } });
     if (name) filter.$or.push({ name: { $regex: name } });
     try {
-      const total = await this.model.find({ ...filter });
+      const total = await this.model.count({ ...filter });
       let res;
       if (skip && limit) {
         res = await this.model.find({ ...filter }).sort({ createAt: -1 }).skip(Number(skip) * Number(limit))

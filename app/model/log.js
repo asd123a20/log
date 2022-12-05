@@ -17,6 +17,8 @@ const SchemaDefine = {
   userName: { type: String, required: false },
   // 姓名
   name: { type: String, required: false },
+  // ip
+  ip: { type: String, required: false },
   // 创建时间
   createAt: { type: Number, required: false },
 };

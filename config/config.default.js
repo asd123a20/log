@@ -31,7 +31,7 @@ module.exports = appInfo => {
   };
   config.cluster = {
     listen: {
-      port: 18094,
+      port: 9002,
     },
   };
   // 数据库配置
